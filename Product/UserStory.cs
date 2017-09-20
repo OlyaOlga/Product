@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Product
 {
-    class UserStory:
+    public class UserStory:
         IRequirement,
         ICloneable,
         IComparable<UserStory>

@@ -51,7 +51,9 @@
     <Compile Include="Prototype.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
-    <Compile Include="Specification.cs" />
+    <Compile Include="Specification.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="UserStory.cs" />
   </ItemGroup>
   <ItemGroup>

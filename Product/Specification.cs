@@ -7,23 +7,32 @@ using System.Threading.Tasks;
 
 namespace Product
 {
-    class Specification:
+    public class Specification :
         IRequirement,
-        ICloneable, 
+        ICloneable,
         IComparable<Specification>
     {
-        string _productName;
-        public string ProductName
-        {
-            get { return _productName; }
-            set { _productName = value; }
-        }
+        private string productName;
         private List<UserStory> userStories;
         private List<Prototype> prototypes;
+
+        public Specification(string name)
+        {
+            userStories = new List<UserStory>();
+            prototypes = new List<Prototype>();
+            ReadRequirement(name);
+        }
+
         public Specification()
         {
             userStories = new List<UserStory>();
             prototypes = new List<Prototype>();
+        }
+
+        public string ProductName
+        {
+            get { return productName; }
+            set { productName = value; }
         }
 
         public List<UserStory> UserStories
@@ -42,7 +51,6 @@ namespace Product
             }
         }
 
-
         public void AddUserStory(UserStory obj)
         {
             userStories.Add(obj);
@@ -53,15 +61,9 @@ namespace Product
             prototypes.Add(obj);
         }
 
-        public Specification(string name)
-        {
-            userStories = new List<UserStory>();
-            prototypes = new List<Prototype>();
-            ReadRequirement(name);
-        }
         public void ReadRequirement(string element)
         {
-            string [] data = element.Split(',');
+            string[] data = element.Split(',');
             ProductName = data[0];
             string[] currentUserStories = data[1].Split('/');
             string[] currentPrototype = data[2].Split('/');
@@ -70,6 +72,7 @@ namespace Product
                 UserStory current = new UserStory(currentUserStories[i]);
                 userStories.Add(current);
             }
+
             for (int i = 0; i < currentPrototype.Length; ++i)
             {
                 Prototype current = new Prototype(currentPrototype[i]);
@@ -87,11 +90,13 @@ namespace Product
                 {
                     writer.WriteLine(item);
                 }
+
                 writer.WriteLine("Prototypes");
                 foreach (var item in prototypes)
                 {
                     writer.WriteLine(item);
                 }
+
                 writer.WriteLine();
             }
         }
@@ -99,14 +104,16 @@ namespace Product
         public object Clone()
         {
             Specification res = new Specification(ProductName);
-            for (int i=0; i<userStories.Count; ++i)
+            for (int i = 0; i < userStories.Count; ++i)
             {
                 res.userStories[i] = (UserStory)userStories[i].Clone();
             }
+
             for (int i = 0; i < prototypes.Count; ++i)
             {
-                res.prototypes[i] = (Prototype) prototypes[i].Clone();
+                res.prototypes[i] = (Prototype)prototypes[i].Clone();
             }
+
             return res;
         }
 
@@ -125,11 +132,13 @@ namespace Product
                 res += i.ToString();
                 res += '\n';
             }
+
             foreach (var i in prototypes)
             {
                 res += i.ToString();
                 res += '\n';
             }
+
             return res;
         }
     }
