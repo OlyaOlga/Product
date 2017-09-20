@@ -7,32 +7,14 @@ using System.Threading.Tasks;
 
 namespace Product
 {
-    public class UserStory:
+    public class UserStory :
         IRequirement,
         ICloneable,
         IComparable<UserStory>
     {
-        private string _productName;
-        private string _story;
-        private string _text;
-
-        public string Story
-        {
-            get { return _story; }
-            set { _story = value; }
-        }
-
-        private string Text
-        {
-            get { return _text; }
-            set { _text = value; }
-        }
-
-        public string ProductName
-        {
-            get { return _productName; }
-            set { _productName = value; }
-        }
+        private string productName;
+        private string story;
+        private string text;
 
         public UserStory(string productName, string story, string text)
         {
@@ -49,7 +31,26 @@ namespace Product
         {
             ReadRequirement(unparcedString);
         }
-        public void ReadRequirement(string element)// product, userStory, text
+
+        public string Story
+        {
+            get { return story; }
+            set { story = value; }
+        }
+
+        public string ProductName
+        {
+            get { return productName; }
+            set { productName = value; }
+        }
+
+        private string Text // ????
+        {
+            get { return text; }
+            set { text = value; }
+        }
+
+        public void ReadRequirement(string element) // product, userStory, text
         {
             int fieldsQuantity = 3;
             string[] elementData = element.Split(' ');
@@ -57,6 +58,7 @@ namespace Product
             {
                 throw new ArgumentException("Invalid quantity of entities in string");
             }
+
             ProductName = elementData[0];
             Story = elementData[1];
             Text = elementData[2];
