@@ -7,6 +7,10 @@ using System.Threading.Tasks;
 
 namespace Product
 {
+    /// <summary>
+    /// Represents prototype entities. Has product name, prototype name. image of prototype and
+    /// measurement
+    /// </summary>
     public class Prototype :
         IRequirement,
         ICloneable,
@@ -106,6 +110,12 @@ namespace Product
             return cloned;
         }
 
+        /// <summary>
+        /// Try to parse data and mesurement.
+        /// </summary>
+        /// <param name="data">Data to parse size and measurement</param>
+        /// <returns>Returns measurement volume</returns>
+        /// <exception cref="ArgumentException">Data has incorect format</exception>
         private int CheckRequirementDataFormat(string[] data)
         {
             int currentMesurement;
@@ -119,6 +129,11 @@ namespace Product
             return currentMesurement;
         }
 
+        /// <summary>
+        /// Represents name of image.
+        /// Has information about product name, prototype name,
+        /// system information about image format.
+        /// </summary>
         public class ImageName
         {
             public ImageName()
