@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Product
 {
+    /// <summary>
+    /// Represent specification which consists of caption, list of UserStories and Prototypes (optional)
+    /// </summary>
     public class Specification :
         IRequirement,
         ICloneable,
@@ -41,6 +44,10 @@ namespace Product
             Prototypes.Add(obj);
         }
 
+        /// <summary>
+        /// Parse element in order to read productn name, list of user stories and list of prototypes
+        /// </summary>
+        /// <param name="element">Line to prase element</param>
         public void ReadRequirement(string element)
         {
             string[] data = element.Split(',');
