@@ -12,9 +12,7 @@ namespace Product
         ICloneable,
         IComparable<Prototype>
     {
-        private ImageName name;
         private int size;
-        private Measurement measurement;
 
         public Prototype()
         {
@@ -60,24 +58,9 @@ namespace Product
             Gigabyte
         }
 
-        public Measurement CurrentMeasurement
-        {
-            get
-            {
-                return measurement;
-            }
+        public Measurement CurrentMeasurement { get; set; }
 
-            set
-            {
-                measurement = value;
-            }
-        }
-
-        public ImageName Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+        public ImageName Name { get; set; }
 
         public int Size
         {
@@ -90,23 +73,22 @@ namespace Product
             string[] data = element.Split(' ');
             Name.ProductName = data[0];
             Name.PrototypeName = data[1];
-            if (int.TryParse(data[2], out size) == false)
-            {
-                throw new ArgumentException("Wrong data!");
-            }
-
-            if (int.TryParse(data[3], out size) == false)
-            {
-                throw new ArgumentException("Wrong data!");
-            }
-
-            int currentMesurement;
-            if (int.TryParse(data[4], out currentMesurement) == false)
-            {
-                throw new ArgumentException("Wrong data!");
-            }
+            var currentMesurement = checkRequirementDataFormat(data);
 
             CurrentMeasurement = (Measurement)currentMesurement;
+        }
+
+        private int checkRequirementDataFormat(string[] data)
+        {
+            int currentMesurement;
+            if (!int.TryParse(data[2], out size) ||
+                !int.TryParse(data[3], out size) ||
+                !int.TryParse(data[4], out currentMesurement))
+            {
+                throw new ArgumentException("Wrong data!");
+            }
+
+            return currentMesurement;
         }
 
         public void WriteRequirement(string fileName)
