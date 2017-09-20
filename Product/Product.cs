@@ -9,37 +9,40 @@ using System.Threading.Tasks;
 
 namespace Product
 {
+    /// <summary>
+    /// This class contains main method. Represent  interface for reading/writing
+    /// data from/to file.
+    /// </summary>
     public class Product
     {
-        public static string DataFile = "data.txt";
-        public static string ResFile = "res.txt";
+        private static string dataFile = "data.txt";
+        private static string resFile = "res.txt";
+
         public static void AddPrototypesToSpecification(List<IRequirement> specificationInInterface, List<IRequirement> userStoriesInInterface, List<IRequirement> prototypesInInterface)
         {
             var specifications = specificationInInterface.ConvertAll(i => (Specification)i);
             var prototypes = prototypesInInterface.ConvertAll(i => (Prototype)i);
             var userStories = userStoriesInInterface.ConvertAll(i => (UserStory)i);
 
-
             AddUserStoriesToSpecification(specifications, userStories);
             AddPrototypesToSpecification(specifications, prototypes);
             foreach (var item in specifications)
             {
-                item.WriteRequirement(ResFile);
+                item.WriteRequirement(resFile);
             }
         }
+
         public static void Main()
         {
-
             try
             {
-
-                var str = File.Open(ResFile, FileMode.OpenOrCreate);
+                var str = File.Open(resFile, FileMode.OpenOrCreate);
                 str.SetLength(0);
                 str.Close();
                 List<IRequirement> userStoryRequirements = new List<IRequirement>();
                 List<IRequirement> prototypeRequirement = new List<IRequirement>();
                 List<IRequirement> specificationRequirements = new List<IRequirement>();
-                string[] dataFileByLines = File.ReadAllLines(DataFile);
+                string[] dataFileByLines = File.ReadAllLines(dataFile);
                 int userStorySize;
                 int prototypeSize;
                 int specificationSize;
@@ -62,6 +65,7 @@ namespace Product
                         Console.WriteLine(obj.Message);
                     }
                 }
+
                 for (int i = userStorySize + 1; i <= userStorySize + prototypeSize; ++i)
                 {
                     try
@@ -73,6 +77,7 @@ namespace Product
                         Console.WriteLine(obj.Message);
                     }
                 }
+
                 for (int i = userStorySize + prototypeSize + 1; i <= totalSize; ++i)
                 {
                     try
@@ -84,7 +89,6 @@ namespace Product
                         Console.WriteLine(obj.Message);
                     }
                 }
-
 
                 var sortedUserStory = userStoryRequirements.OrderBy(i => (i as UserStory).ProductName).ToList();
                 var sortedPrototype = prototypeRequirement.OrderByDescending(i => (i as Prototype).CurrentMeasurement).ThenByDescending(i => (i as Prototype).Size).ToList();
@@ -99,14 +103,13 @@ namespace Product
                 Console.WriteLine("Specifications sorted by name:");
                 Print(specificationRequirements);
 
-
                 AddPrototypesToSpecification(specificationRequirements, userStoryRequirements, prototypeRequirement);
-
             }
             catch (Exception obj)
             {
                 Console.WriteLine(obj.Message);
             }
+
             Console.ReadKey();
         }
 
@@ -116,6 +119,7 @@ namespace Product
             {
                 Console.WriteLine(item);
             }
+
             Console.WriteLine();
         }
 
