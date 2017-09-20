@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Product
 {
+    /// <summary>
+    /// Represent single requirement for product - product name and story
+    /// </summary>
     public class UserStory :
         IRequirement,
         ICloneable,
@@ -34,7 +37,11 @@ namespace Product
 
         private string Text { get; set; }
 
-        public void ReadRequirement(string element) // product, userStory, text
+        /// <summary>
+        /// Read UserStiry from single line
+        /// </summary>
+        /// <param name="element">Line to parse element</param>
+        public void ReadRequirement(string element)
         {
             int fieldsQuantity = 3;
             string[] elementData = element.Split(' ');
