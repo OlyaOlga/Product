@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Product
 {
-    interface IRequirement
+    public interface IRequirement
     {
         void ReadRequirement(string element);
         void WriteRequirement(string fileName);

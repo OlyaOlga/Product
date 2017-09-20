@@ -9,24 +9,114 @@ using System.Threading.Tasks;
 
 namespace Product
 {
-    class Product
+    public class Product
     {
-        public static string dataFile = "data.txt";
-        public static string resFile = "res.txt";
-        public static void AddPrototypesToSpecification(List<IRequirement> specificationInInterface, List<IRequirement> userStoriesInInterface,
-            List<IRequirement> prototypesInInterface)
+        public static string DataFile = "data.txt";
+        public static string ResFile = "res.txt";
+        public static void AddPrototypesToSpecification(List<IRequirement> specificationInInterface, List<IRequirement> userStoriesInInterface, List<IRequirement> prototypesInInterface)
         {
-            var specifications = specificationInInterface.ConvertAll(i => (Specification) i);
-            var prototypes = prototypesInInterface.ConvertAll(i => (Prototype) i);
-            var userStories = userStoriesInInterface.ConvertAll(i => (UserStory) i);
+            var specifications = specificationInInterface.ConvertAll(i => (Specification)i);
+            var prototypes = prototypesInInterface.ConvertAll(i => (Prototype)i);
+            var userStories = userStoriesInInterface.ConvertAll(i => (UserStory)i);
 
-          
+
             AddUserStoriesToSpecification(specifications, userStories);
             AddPrototypesToSpecification(specifications, prototypes);
             foreach (var item in specifications)
             {
-                item.WriteRequirement(resFile);
+                item.WriteRequirement(ResFile);
             }
+        }
+        public static void Main()
+        {
+
+            try
+            {
+
+                var str = File.Open(ResFile, FileMode.OpenOrCreate);
+                str.SetLength(0);
+                str.Close();
+                List<IRequirement> userStoryRequirements = new List<IRequirement>();
+                List<IRequirement> prototypeRequirement = new List<IRequirement>();
+                List<IRequirement> specificationRequirements = new List<IRequirement>();
+                string[] dataFileByLines = File.ReadAllLines(DataFile);
+                int userStorySize;
+                int prototypeSize;
+                int specificationSize;
+
+                string[] sizes = dataFileByLines[0].Split(' ');
+                int.TryParse(sizes[0], out userStorySize);
+                int.TryParse(sizes[1], out prototypeSize);
+                int.TryParse(sizes[2], out specificationSize);
+
+                int totalSize = userStorySize + prototypeSize + specificationSize;
+
+                for (int i = 1; i <= userStorySize; ++i)
+                {
+                    try
+                    {
+                        userStoryRequirements.Add(new UserStory(dataFileByLines[i]));
+                    }
+                    catch (Exception obj)
+                    {
+                        Console.WriteLine(obj.Message);
+                    }
+                }
+                for (int i = userStorySize + 1; i <= userStorySize + prototypeSize; ++i)
+                {
+                    try
+                    {
+                        prototypeRequirement.Add(new Prototype(dataFileByLines[i]));
+                    }
+                    catch (Exception obj)
+                    {
+                        Console.WriteLine(obj.Message);
+                    }
+                }
+                for (int i = userStorySize + prototypeSize + 1; i <= totalSize; ++i)
+                {
+                    try
+                    {
+                        specificationRequirements.Add(new Specification(dataFileByLines[i]));
+                    }
+                    catch (Exception obj)
+                    {
+                        Console.WriteLine(obj.Message);
+                    }
+                }
+
+
+                var sortedUserStory = userStoryRequirements.OrderBy(i => (i as UserStory).ProductName).ToList();
+                var sortedPrototype = prototypeRequirement.OrderByDescending(i => (i as Prototype).CurrentMeasurement).ThenByDescending(i => (i as Prototype).Size).ToList();
+                var sortedSpecification = specificationRequirements.OrderBy(i => (i as Specification).ProductName).ToList();
+
+                Console.WriteLine("Users stories sorted by name:");
+                Print(userStoryRequirements);
+
+                Console.WriteLine("Prototypes sorted by size: ");
+                Print(prototypeRequirement);
+
+                Console.WriteLine("Specifications sorted by name:");
+                Print(specificationRequirements);
+
+
+                AddPrototypesToSpecification(specificationRequirements, userStoryRequirements, prototypeRequirement);
+
+            }
+            catch (Exception obj)
+            {
+                Console.WriteLine(obj.Message);
+            }
+            Console.ReadKey();
+        }
+
+        public static void Print(List<IRequirement> lst)
+        {
+            foreach (var item in lst)
+            {
+                Console.WriteLine(item);
+            }
+            Console.WriteLine();
         }
 
         private static void AddPrototypesToSpecification(List<Specification> specifications, List<Prototype> prototypes)
@@ -35,18 +125,18 @@ namespace Product
                 from i in specifications
                 from k in prototypes
                 where i.ProductName == k.Name.ProductName
-                select new {Name = i.ProductName, Prototypes = k};
+                select new { Name = i.ProductName, Prototypes = k };
             var groupping =
                 (from i in chosenPrototypes
-                    group i by i.Name
+                 group i by i.Name
                     into groupedPrototypes
-                    select new
-                    {
-                        Key = groupedPrototypes.Key,
-                        Values =
-                            from j in groupedPrototypes
-                            select j.Prototypes
-                    }).ToList();
+                 select new
+                 {
+                     Key = groupedPrototypes.Key,
+                     Values =
+                         from j in groupedPrototypes
+                         select j.Prototypes
+                 }).ToList();
 
             for (int i = 0; i < groupping.Count; ++i)
             {
@@ -97,97 +187,6 @@ namespace Product
                     }
                 }
             }
-        }
-        public static void Main()
-        {
-
-            try
-            {
-
-            var str = File.Open(resFile, FileMode.OpenOrCreate);
-            str.SetLength(0);
-            str.Close();
-            List<IRequirement> UserStoryRequirements = new List<IRequirement>();
-            List<IRequirement> PrototypeRequirement = new List<IRequirement>();
-            List<IRequirement> SpecificationRequirements = new List<IRequirement>();
-            string[] dataFileByLines = File.ReadAllLines(dataFile);
-            int userStorySize;
-            int prototypeSize;
-            int specificationSize;
-
-            string[] sizes = dataFileByLines[0].Split(' ');
-            int.TryParse(sizes[0], out userStorySize);
-            int.TryParse(sizes[1], out prototypeSize);
-            int.TryParse(sizes[2], out specificationSize);
-
-            int totalSize = userStorySize + prototypeSize + specificationSize;
-           
-            for (int i = 1; i <= userStorySize; ++i)
-            {
-                try
-                {
-                    UserStoryRequirements.Add(new UserStory(dataFileByLines[i]));
-                }
-                catch (Exception obj)
-                {
-                    Console.WriteLine( obj.Message);
-                }
-            }
-            for (int i = userStorySize + 1; i <= userStorySize + prototypeSize; ++i)
-            {
-                try
-                {
-                    PrototypeRequirement.Add(new Prototype(dataFileByLines[i]));
-                }
-                catch (Exception obj)
-                {
-                    Console.WriteLine(obj.Message);
-                }
-            }
-            for (int i = userStorySize+prototypeSize+1; i <= totalSize; ++i)
-            {
-                try
-                {
-                    SpecificationRequirements.Add(new Specification(dataFileByLines[i]));
-                }
-                catch (Exception obj)
-                {
-                    Console.WriteLine( obj.Message);
-                }
-            }
-
-            
-            var sortedUserStory = UserStoryRequirements.OrderBy(i => (i as UserStory).ProductName).ToList();
-            var sortedPrototype = PrototypeRequirement.OrderByDescending(i => (i as Prototype).CurrentMeasurement).ThenByDescending(i=>(i as Prototype).Size).ToList();
-            var sortedSpecification = SpecificationRequirements.OrderBy(i => (i as Specification).ProductName).ToList();
-
-            Console.WriteLine( "Users stories sorted by name:");
-            Print(UserStoryRequirements);
-
-            Console.WriteLine("Prototypes sorted by size: ");
-            Print(PrototypeRequirement);
-
-            Console.WriteLine( "Specifications sorted by name:");
-            Print(SpecificationRequirements);
-
-
-            AddPrototypesToSpecification(SpecificationRequirements,UserStoryRequirements, PrototypeRequirement);
-
-            }
-            catch (Exception obj)
-            {
-                Console.WriteLine( obj.Message);
-            }
-            Console.ReadKey();
-        }
-
-        public static void Print(List<IRequirement> lst)
-        {
-            foreach (var item in lst)
-            {
-                Console.WriteLine( item);
-            }
-            Console.WriteLine( );
         }
     }
 }
