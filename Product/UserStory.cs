@@ -12,10 +12,6 @@ namespace Product
         ICloneable,
         IComparable<UserStory>
     {
-        private string productName;
-        private string story;
-        private string text;
-
         public UserStory(string productName, string story, string text)
         {
             ProductName = productName;
@@ -32,23 +28,11 @@ namespace Product
             ReadRequirement(unparcedString);
         }
 
-        public string Story
-        {
-            get { return story; }
-            set { story = value; }
-        }
+        public string Story { get; set; }
 
-        public string ProductName
-        {
-            get { return productName; }
-            set { productName = value; }
-        }
+        public string ProductName { get; set; }
 
-        private string Text // ????
-        {
-            get { return text; }
-            set { text = value; }
-        }
+        private string Text { get; set; }
 
         public void ReadRequirement(string element) // product, userStory, text
         {
@@ -78,14 +62,8 @@ namespace Product
             return copy;
         }
 
-        public int CompareTo(UserStory other)
-        {
-            return ProductName.CompareTo(other.ProductName);
-        }
+        public int CompareTo(UserStory other) => string.Compare(ProductName, other.ProductName, StringComparison.Ordinal);
 
-        public override string ToString()
-        {
-            return $"ProductName: {ProductName} Story:{Story} Text:{Text}";
-        }
+        public override string ToString() => $"ProductName: {ProductName} Story:{Story} Text:{Text}";
     }
 }
