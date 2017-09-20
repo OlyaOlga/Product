@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Product
 {
-    class Program
+    interface IRequirement
     {
-        static void Main(string[] args)
-        {
-        }
+        void ReadRequirement(string element);
+        void WriteRequirement(string fileName);
     }
 }
