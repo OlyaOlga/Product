@@ -7,73 +7,14 @@ using System.Threading.Tasks;
 
 namespace Product
 {
-    class Prototype:
+    public class Prototype :
         IRequirement,
         ICloneable,
         IComparable<Prototype>
     {
-        public enum Measurement
-        {
-            Byte,
-            Kilobyte,
-            Megabyte,
-            Gigabyte
-        }
-
-        public class ImageName
-        {
-            public string ProductName { get; set; }
-            public string PrototypeName { get; set; }
-            public Format FormatName { get; set; }
-            public enum Format
-            {
-                Jpg,
-                Png,
-                Gif
-            }
-
-            public ImageName()
-            {
-            }
-            public ImageName(string productName, string prototypeName, Format formatName)
-            {
-                productName = ProductName;
-                prototypeName = PrototypeName;
-                formatName = FormatName;
-            }
-            public override string ToString()
-            {
-                return $"{ProductName}{PrototypeName}.{FormatName}";
-            }
-        }
-
-
-        private ImageName _name;
-        private int _size;
-        private Measurement _measurement;
-        public Measurement CurrentMeasurement {
-            get
-            {
-                return _measurement;
-                
-            }
-            set
-            {
-                _measurement = value;
-            }
-        }
-
-        public ImageName Name
-        {
-            get { return _name; }
-            set { _name = value; }
-        }
-
-        public int Size
-        {
-            get { return _size; }
-            set { _size = value; }
-        }
+        private ImageName name;
+        private int size;
+        private Measurement measurement;
 
         public Prototype()
         {
@@ -93,26 +34,79 @@ namespace Product
             ReadRequirement(data);
         }
 
+        /// <summary>
+        /// Represent types of copmuter volume measeres
+        /// </summary>
+        public enum Measurement
+        {
+            /// <summary>
+            /// Measures has 1e+0 bytes
+            /// </summary>
+            Byte,
+
+            /// <summary>
+            /// Measures has 1,0.24e+3 bytes
+            /// </summary>
+            Kilobyte,
+
+            /// <summary>
+            /// Measures has 1,0.24e+6 bytes
+            /// </summary>
+            Megabyte,
+
+            /// <summary>
+            /// Measures has 1,0.24e+9 bytes
+            /// </summary>
+            Gigabyte
+        }
+
+        public Measurement CurrentMeasurement
+        {
+            get
+            {
+                return measurement;
+            }
+
+            set
+            {
+                measurement = value;
+            }
+        }
+
+        public ImageName Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        public int Size
+        {
+            get { return size; }
+            set { size = value; }
+        }
+
         public void ReadRequirement(string element)
         {
             string[] data = element.Split(' ');
             Name.ProductName = data[0];
             Name.PrototypeName = data[1];
-            if (int.TryParse(data[2], out _size) == false)
+            if (int.TryParse(data[2], out size) == false)
             {
                 throw new ArgumentException("Wrong data!");
             }
-            if (int.TryParse(data[3], out _size) == false)
+
+            if (int.TryParse(data[3], out size) == false)
             {
                 throw new ArgumentException("Wrong data!");
             }
+
             int currentMesurement;
             if (int.TryParse(data[4], out currentMesurement) == false)
             {
                 throw new ArgumentException("Wrong data!");
             }
 
-            CurrentMeasurement = (Measurement) currentMesurement;
+            CurrentMeasurement = (Measurement)currentMesurement;
         }
 
         public void WriteRequirement(string fileName)
@@ -130,6 +124,7 @@ namespace Product
             {
                 res = Size.CompareTo(other.Size);
             }
+
             return res;
         }
 
@@ -137,12 +132,55 @@ namespace Product
         {
             return $"Name: {Name}, Size: {Size} {CurrentMeasurement.ToString()}";
         }
-        
+
         public object Clone()
         {
             ImageName name = new ImageName(Name.ProductName, Name.PrototypeName, Name.FormatName);
             Prototype cloned = new Prototype(name, Size, CurrentMeasurement);
             return cloned;
+        }
+
+        public class ImageName
+        {
+            public ImageName()
+            {
+            }
+
+            public ImageName(string productName, string prototypeName, Format formatName)
+            {
+                productName = ProductName;
+                prototypeName = PrototypeName;
+                formatName = FormatName;
+            }
+
+            public enum Format
+            {
+                /// <summary>
+                /// Joint Photographic Experts Group
+                /// </summary>
+                Jpg,
+
+                /// <summary>
+                /// Portable Network Graphics
+                /// </summary>
+                Png,
+
+                /// <summary>
+                /// Graphics Interchange Format
+                /// </summary>
+                Gif
+            }
+
+            public string ProductName { get; set; }
+
+            public string PrototypeName { get; set; }
+
+            public Format FormatName { get; set; }
+
+            public override string ToString()
+            {
+                return $"{ProductName}{PrototypeName}.{FormatName}";
+            }
         }
     }
 }
