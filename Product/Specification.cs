@@ -12,53 +12,33 @@ namespace Product
         ICloneable,
         IComparable<Specification>
     {
-        private string productName;
-        private List<UserStory> userStories;
-        private List<Prototype> prototypes;
-
         public Specification(string name)
         {
-            userStories = new List<UserStory>();
-            prototypes = new List<Prototype>();
+            UserStories = new List<UserStory>();
+            Prototypes = new List<Prototype>();
             ReadRequirement(name);
         }
 
         public Specification()
         {
-            userStories = new List<UserStory>();
-            prototypes = new List<Prototype>();
+            UserStories = new List<UserStory>();
+            Prototypes = new List<Prototype>();
         }
 
-        public string ProductName
-        {
-            get { return productName; }
-            set { productName = value; }
-        }
+        public string ProductName { get; set; }
 
-        public List<UserStory> UserStories
-        {
-            get
-            {
-                return userStories;
-            }
-        }
+        public List<UserStory> UserStories { get; }
 
-        public List<Prototype> Prototypes
-        {
-            get
-            {
-                return prototypes;
-            }
-        }
+        public List<Prototype> Prototypes { get; }
 
         public void AddUserStory(UserStory obj)
         {
-            userStories.Add(obj);
+            UserStories.Add(obj);
         }
 
         public void AddPrototype(Prototype obj)
         {
-            prototypes.Add(obj);
+            Prototypes.Add(obj);
         }
 
         public void ReadRequirement(string element)
@@ -67,16 +47,16 @@ namespace Product
             ProductName = data[0];
             string[] currentUserStories = data[1].Split('/');
             string[] currentPrototype = data[2].Split('/');
-            for (int i = 0; i < currentUserStories.Length; ++i)
+            foreach (string userStory in currentUserStories)
             {
-                UserStory current = new UserStory(currentUserStories[i]);
-                userStories.Add(current);
+                UserStory current = new UserStory(userStory);
+                UserStories.Add(current);
             }
 
-            for (int i = 0; i < currentPrototype.Length; ++i)
+            foreach (string prototype in currentPrototype)
             {
-                Prototype current = new Prototype(currentPrototype[i]);
-                prototypes.Add(current);
+                Prototype current = new Prototype(prototype);
+                Prototypes.Add(current);
             }
         }
 
@@ -86,13 +66,13 @@ namespace Product
             {
                 writer.WriteLine(ProductName);
                 writer.WriteLine("User Stories");
-                foreach (var item in userStories)
+                foreach (var item in UserStories)
                 {
                     writer.WriteLine(item);
                 }
 
                 writer.WriteLine("Prototypes");
-                foreach (var item in prototypes)
+                foreach (var item in Prototypes)
                 {
                     writer.WriteLine(item);
                 }
@@ -104,36 +84,32 @@ namespace Product
         public object Clone()
         {
             Specification res = new Specification(ProductName);
-            for (int i = 0; i < userStories.Count; ++i)
+            for (int i = 0; i < UserStories.Count; ++i)
             {
-                res.userStories[i] = (UserStory)userStories[i].Clone();
+                res.UserStories[i] = (UserStory)UserStories[i].Clone();
             }
 
-            for (int i = 0; i < prototypes.Count; ++i)
+            for (int i = 0; i < Prototypes.Count; ++i)
             {
-                res.prototypes[i] = (Prototype)prototypes[i].Clone();
+                res.Prototypes[i] = (Prototype)Prototypes[i].Clone();
             }
 
             return res;
         }
 
-        public int CompareTo(Specification other)
-        {
-            return ProductName.CompareTo(other.ProductName);
-        }
+        public int CompareTo(Specification other) => string.Compare(ProductName, other.ProductName, StringComparison.Ordinal);
 
         public override string ToString()
         {
-            string res;
-            res = ProductName;
+            var res = ProductName;
             res += '\n';
-            foreach (var i in userStories)
+            foreach (var i in UserStories)
             {
                 res += i.ToString();
                 res += '\n';
             }
 
-            foreach (var i in prototypes)
+            foreach (var i in Prototypes)
             {
                 res += i.ToString();
                 res += '\n';
