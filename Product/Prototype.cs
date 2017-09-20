@@ -73,22 +73,9 @@ namespace Product
             string[] data = element.Split(' ');
             Name.ProductName = data[0];
             Name.PrototypeName = data[1];
-            var currentMesurement = checkRequirementDataFormat(data);
+            var currentMesurement = CheckRequirementDataFormat(data);
 
             CurrentMeasurement = (Measurement)currentMesurement;
-        }
-
-        private int checkRequirementDataFormat(string[] data)
-        {
-            int currentMesurement;
-            if (!int.TryParse(data[2], out size) ||
-                !int.TryParse(data[3], out size) ||
-                !int.TryParse(data[4], out currentMesurement))
-            {
-                throw new ArgumentException("Wrong data!");
-            }
-
-            return currentMesurement;
         }
 
         public void WriteRequirement(string fileName)
@@ -110,16 +97,26 @@ namespace Product
             return res;
         }
 
-        public override string ToString()
-        {
-            return $"Name: {Name}, Size: {Size} {CurrentMeasurement.ToString()}";
-        }
+        public override string ToString() => $"Name: {Name}, Size: {Size} {CurrentMeasurement.ToString()}";
 
         public object Clone()
         {
             ImageName name = new ImageName(Name.ProductName, Name.PrototypeName, Name.FormatName);
             Prototype cloned = new Prototype(name, Size, CurrentMeasurement);
             return cloned;
+        }
+
+        private int CheckRequirementDataFormat(string[] data)
+        {
+            int currentMesurement;
+            if (!int.TryParse(data[2], out size) ||
+                !int.TryParse(data[3], out size) ||
+                !int.TryParse(data[4], out currentMesurement))
+            {
+                throw new ArgumentException("Wrong data!");
+            }
+
+            return currentMesurement;
         }
 
         public class ImageName
@@ -130,9 +127,9 @@ namespace Product
 
             public ImageName(string productName, string prototypeName, Format formatName)
             {
-                productName = ProductName;
-                prototypeName = PrototypeName;
-                formatName = FormatName;
+                ProductName = productName;
+                PrototypeName = prototypeName;
+                FormatName = formatName;
             }
 
             public enum Format
@@ -159,10 +156,7 @@ namespace Product
 
             public Format FormatName { get; set; }
 
-            public override string ToString()
-            {
-                return $"{ProductName}{PrototypeName}.{FormatName}";
-            }
+            public override string ToString() => $"{ProductName}{PrototypeName}.{FormatName}";
         }
     }
 }
