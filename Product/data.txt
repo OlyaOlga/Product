@@ -1,0 +1,13 @@
+4 5 3
+pr3 usstor1 some_info
+pr1 userstory2 another_info
+pr2 userstory3 one_more_piece_of_info
+pr1 us12 aaaaaaa
+prot1 userStory1 0 300 1
+prod5 us5 1 1 2
+prot8 us8 0 789 1
+prod2 us2 3 500 1
+prod2 us9 0 2 2
+pr1,pr1 us1 aaa/pr2 us2 bbb/name us3 nnn,name1 us1 0 512 1
+prod5,pr2 us3 sometext/prot1 story1 info,name1 us1 0 512 1/name3 us3 2 122 1
+prod2,prot1 story1 info,prod5 user2 1 555 0

@@ -1,0 +1,27 @@
+pr1
+User Stories
+ProductName: pr1 Story:us1 Text:aaa
+ProductName: pr2 Story:us2 Text:bbb
+ProductName: name Story:us3 Text:nnn
+ProductName: pr1 Story:userstory2 Text:another_info
+ProductName: pr1 Story:us12 Text:aaaaaaa
+Prototypes
+Name: name1us1.Jpg, Size: 512 Kilobyte
+
+prod5
+User Stories
+ProductName: pr2 Story:us3 Text:sometext
+ProductName: prot1 Story:story1 Text:info
+Prototypes
+Name: name1us1.Jpg, Size: 512 Kilobyte
+Name: name3us3.Jpg, Size: 122 Kilobyte
+Name: prod5us5.Jpg, Size: 1 Megabyte
+
+prod2
+User Stories
+ProductName: prot1 Story:story1 Text:info
+Prototypes
+Name: prod5user2.Jpg, Size: 555 Byte
+Name: prod2us2.Jpg, Size: 500 Kilobyte
+Name: prod2us9.Jpg, Size: 2 Megabyte
+
