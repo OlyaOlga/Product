@@ -15,22 +15,8 @@ namespace Product
     /// </summary>
     public class Product
     {
-        private static string dataFile = "data.txt";
-        private static string resFile = "res.txt";
-
-        public static void AddPrototypesToSpecification(List<IRequirement> specificationInInterface, List<IRequirement> userStoriesInInterface, List<IRequirement> prototypesInInterface)
-        {
-            var specifications = specificationInInterface.ConvertAll(i => (Specification)i);
-            var prototypes = prototypesInInterface.ConvertAll(i => (Prototype)i);
-            var userStories = userStoriesInInterface.ConvertAll(i => (UserStory)i);
-
-            AddUserStoriesToSpecification(specifications, userStories);
-            AddPrototypesToSpecification(specifications, prototypes);
-            foreach (var item in specifications)
-            {
-                item.WriteRequirement(resFile);
-            }
-        }
+        private const string dataFile = "data.txt";
+        private const string resFile = "res.txt";
 
         public static void Main()
         {
@@ -123,6 +109,20 @@ namespace Product
             Console.WriteLine();
         }
 
+        public static void AddPrototypesToSpecification(List<IRequirement> specificationInInterface, List<IRequirement> userStoriesInInterface, List<IRequirement> prototypesInInterface)
+        {
+            var specifications = specificationInInterface.ConvertAll(i => (Specification)i);
+            var prototypes = prototypesInInterface.ConvertAll(i => (Prototype)i);
+            var userStories = userStoriesInInterface.ConvertAll(i => (UserStory)i);
+
+            AddUserStoriesToSpecification(specifications, userStories);
+            AddPrototypesToSpecification(specifications, prototypes);
+            foreach (var item in specifications)
+            {
+                item.WriteRequirement(resFile);
+            }
+        }
+
         private static void AddPrototypesToSpecification(List<Specification> specifications, List<Prototype> prototypes)
         {
             var chosenPrototypes =
@@ -142,16 +142,16 @@ namespace Product
                          select j.Prototypes
                  }).ToList();
 
-            for (int i = 0; i < groupping.Count; ++i)
+            foreach (var groupItem in groupping)
             {
-                for (int j = 0; j < specifications.Count; ++j)
+                foreach (Specification specificationItem in specifications)
                 {
-                    if (specifications[j].ProductName == groupping[i].Key)
+                    if (specificationItem.ProductName == groupItem.Key)
                     {
-                        var listOfPrototypes = groupping[i].Values.ToList();
-                        for (int k = 0; k < listOfPrototypes.Count; ++k)
+                        var listOfPrototypes = groupItem.Values.ToList();
+                        foreach (Prototype prototypeItem in listOfPrototypes)
                         {
-                            specifications[j].AddPrototype(listOfPrototypes[k]);
+                            specificationItem.AddPrototype(prototypeItem);
                         }
                     }
                 }
