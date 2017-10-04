@@ -1,79 +1,66 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Product
 {
-    class Specification:
+    /// <summary>
+    /// Represent specification which consists of caption, list of UserStories and Prototypes (optional)
+    /// </summary>
+    public class Specification :
         IRequirement,
-        ICloneable, 
+        ICloneable,
         IComparable<Specification>
     {
-        string _productName;
-        public string ProductName
+        public Specification(string name)
         {
-            get { return _productName; }
-            set { _productName = value; }
+            UserStories = new List<UserStory>();
+            Prototypes = new List<Prototype>();
+            ReadRequirement(name);
         }
-        private List<UserStory> userStories;
-        private List<Prototype> prototypes;
+
         public Specification()
         {
-            userStories = new List<UserStory>();
-            prototypes = new List<Prototype>();
+            UserStories = new List<UserStory>();
+            Prototypes = new List<Prototype>();
         }
 
-        public List<UserStory> UserStories
-        {
-            get
-            {
-                return userStories;
-            }
-        }
+        public string ProductName { get; set; }
 
-        public List<Prototype> Prototypes
-        {
-            get
-            {
-                return prototypes;
-            }
-        }
+        public List<UserStory> UserStories { get; }
 
+        public List<Prototype> Prototypes { get; }
 
         public void AddUserStory(UserStory obj)
         {
-            userStories.Add(obj);
+            UserStories.Add(obj);
         }
 
         public void AddPrototype(Prototype obj)
         {
-            prototypes.Add(obj);
+            Prototypes.Add(obj);
         }
 
-        public Specification(string name)
-        {
-            userStories = new List<UserStory>();
-            prototypes = new List<Prototype>();
-            ReadRequirement(name);
-        }
+        /// <summary>
+        /// Parse element in order to read productn name, list of user stories and list of prototypes
+        /// </summary>
+        /// <param name="element">Line to prase element</param>
         public void ReadRequirement(string element)
         {
-            string [] data = element.Split(',');
+            string[] data = element.Split(',');
             ProductName = data[0];
             string[] currentUserStories = data[1].Split('/');
             string[] currentPrototype = data[2].Split('/');
-            for (int i = 0; i < currentUserStories.Length; ++i)
+            foreach (string userStory in currentUserStories)
             {
-                UserStory current = new UserStory(currentUserStories[i]);
-                userStories.Add(current);
+                UserStory current = new UserStory(userStory);
+                UserStories.Add(current);
             }
-            for (int i = 0; i < currentPrototype.Length; ++i)
+
+            foreach (string prototype in currentPrototype)
             {
-                Prototype current = new Prototype(currentPrototype[i]);
-                prototypes.Add(current);
+                Prototype current = new Prototype(prototype);
+                Prototypes.Add(current);
             }
         }
 
@@ -83,15 +70,17 @@ namespace Product
             {
                 writer.WriteLine(ProductName);
                 writer.WriteLine("User Stories");
-                foreach (var item in userStories)
+                foreach (var item in UserStories)
                 {
                     writer.WriteLine(item);
                 }
+
                 writer.WriteLine("Prototypes");
-                foreach (var item in prototypes)
+                foreach (var item in Prototypes)
                 {
                     writer.WriteLine(item);
                 }
+
                 writer.WriteLine();
             }
         }
@@ -99,37 +88,37 @@ namespace Product
         public object Clone()
         {
             Specification res = new Specification(ProductName);
-            for (int i=0; i<userStories.Count; ++i)
+            for (int i = 0; i < UserStories.Count; ++i)
             {
-                res.userStories[i] = (UserStory)userStories[i].Clone();
+                res.UserStories[i] = (UserStory)UserStories[i].Clone();
             }
-            for (int i = 0; i < prototypes.Count; ++i)
+
+            for (int i = 0; i < Prototypes.Count; ++i)
             {
-                res.prototypes[i] = (Prototype) prototypes[i].Clone();
+                res.Prototypes[i] = (Prototype)Prototypes[i].Clone();
             }
+
             return res;
         }
 
-        public int CompareTo(Specification other)
-        {
-            return ProductName.CompareTo(other.ProductName);
-        }
+        public int CompareTo(Specification other) => string.Compare(ProductName, other.ProductName, StringComparison.Ordinal);
 
         public override string ToString()
         {
-            string res;
-            res = ProductName;
+            var res = ProductName;
             res += '\n';
-            foreach (var i in userStories)
+            foreach (var i in UserStories)
             {
                 res += i.ToString();
                 res += '\n';
             }
-            foreach (var i in prototypes)
+
+            foreach (var i in Prototypes)
             {
                 res += i.ToString();
                 res += '\n';
             }
+
             return res;
         }
     }

@@ -1,39 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Product
 {
-    class UserStory:
+    /// <summary>
+    /// Represent single requirement for product - product name and story
+    /// </summary>
+    public class UserStory :
         IRequirement,
         ICloneable,
         IComparable<UserStory>
     {
-        private string _productName;
-        private string _story;
-        private string _text;
-
-        public string Story
-        {
-            get { return _story; }
-            set { _story = value; }
-        }
-
-        private string Text
-        {
-            get { return _text; }
-            set { _text = value; }
-        }
-
-        public string ProductName
-        {
-            get { return _productName; }
-            set { _productName = value; }
-        }
-
         public UserStory(string productName, string story, string text)
         {
             ProductName = productName;
@@ -49,7 +26,18 @@ namespace Product
         {
             ReadRequirement(unparcedString);
         }
-        public void ReadRequirement(string element)// product, userStory, text
+
+        public string Story { get; set; }
+
+        public string ProductName { get; set; }
+
+        private string Text { get; set; }
+
+        /// <summary>
+        /// Read UserStiry from single line
+        /// </summary>
+        /// <param name="element">Line to parse element</param>
+        public void ReadRequirement(string element)
         {
             int fieldsQuantity = 3;
             string[] elementData = element.Split(' ');
@@ -57,6 +45,7 @@ namespace Product
             {
                 throw new ArgumentException("Invalid quantity of entities in string");
             }
+
             ProductName = elementData[0];
             Story = elementData[1];
             Text = elementData[2];
@@ -76,14 +65,8 @@ namespace Product
             return copy;
         }
 
-        public int CompareTo(UserStory other)
-        {
-            return ProductName.CompareTo(other.ProductName);
-        }
+        public int CompareTo(UserStory other) => string.Compare(ProductName, other.ProductName, StringComparison.Ordinal);
 
-        public override string ToString()
-        {
-            return $"ProductName: {ProductName} Story:{Story} Text:{Text}";
-        }
+        public override string ToString() => $"ProductName: {ProductName} Story:{Story} Text:{Text}";
     }
 }
