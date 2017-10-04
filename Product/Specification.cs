@@ -87,15 +87,16 @@ namespace Product
 
         public object Clone()
         {
-            Specification res = new Specification(ProductName);
+            Specification res = new Specification();
+            res.ProductName = ProductName;
             for (int i = 0; i < UserStories.Count; ++i)
             {
-                res.UserStories[i] = (UserStory)UserStories[i].Clone();
+                res.UserStories.Add( (UserStory)UserStories[i].Clone());
             }
 
             for (int i = 0; i < Prototypes.Count; ++i)
             {
-                res.Prototypes[i] = (Prototype)Prototypes[i].Clone();
+                res.Prototypes.Add((Prototype)Prototypes[i].Clone());
             }
 
             return res;
